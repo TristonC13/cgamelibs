@@ -13,14 +13,28 @@ set(HEADERS
     include/cgamelibs.h
 )
 
+# Find Vulkan package
+find_package(Vulkan REQUIRED)
+
 # Create the library
 add_library(cgamelibs STATIC ${SOURCES} ${HEADERS})
+
+# Find Vulkan
+find_package(Vulkan REQUIRED)
+
+# Find GLFW
+find_package(glfw3 REQUIRED)
 
 # Specify the include directory for this library
 target_include_directories(cgamelibs PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
+    ${Vulkan_INCLUDE_DIRS}  # Include Vulkan headers
+    ${glfw3_INCLUDE_DIRS}
 )
+
+# Link Vulkan library
+target_link_libraries(cgamelibs PUBLIC ${Vulkan_LIBRARIES} glfw)
 
 # Optionally, set the C standard
 set_target_properties(cgamelibs PROPERTIES
