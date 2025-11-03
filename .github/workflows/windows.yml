@@ -17,7 +17,7 @@ jobs:
       
       - name: Install valgrind
         run: |
-          winget install valgrind
+          winget install valgrind --accept-package-agreements --silent
 
       - name: Create build directory
         run: |
