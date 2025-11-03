@@ -1,0 +1,40 @@
+name: CMake and CTest CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Install valgrind
+        run: |
+          winget install valgrind
+
+      - name: Create build directory
+        run: |
+          mkdir build
+          cd build
+          cmake ..
+
+      - name: Build with CMake
+        run: |
+          cd build
+          cmake --build . --config Release
+
+      - name: Run tests with CTest
+        run: |
+          cd build
+          ctest --output-on-failure
+      
+      - name: Memcheck with valgrind
+        run: |
+          ctest -S memcheck.cmake
