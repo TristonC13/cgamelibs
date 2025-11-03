@@ -15,9 +15,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       
-      - name: Install valgrind
-        run: |
-          choco install valgrind
+      - name: Valgrind
+        uses: Ximaz/valgrind-action@1.2.1
 
       - name: Create build directory
         run: |
@@ -34,7 +33,3 @@ jobs:
         run: |
           cd build
           ctest --output-on-failure
-      
-      - name: Memcheck with valgrind
-        run: |
-          ctest -S memcheck.cmake
