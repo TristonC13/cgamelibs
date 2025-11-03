@@ -1,8 +1,0 @@
-{
-	"InstallScripts" : 
-	[
-		"/home/andrew/Repos/cgamelibs/build-Valgrind/cmake_install.cmake",
-		"/home/andrew/Repos/cgamelibs/build-Valgrind/tests/cmake_install.cmake"
-	],
-	"Parallel" : false
-}
