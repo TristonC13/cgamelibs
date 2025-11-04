@@ -6,64 +6,56 @@
 
 /**
  * Queries and allocates memory for Vulkan physical devices.
- * The caller is responsible for freeing the memory allocated to *ppDevices.
+ * The caller is responsible for freeing the memory allocated to *window->vkPhysicalDevs.
  *
- * @param instance The active Vulkan instance.
- * @param pPhyDevCt A pointer to an unsigned integer to store the device count.
- * @param ppDevices A pointer to a VkPhysicalDevice* to store the dynamically allocated array.
+ * @param window The game window
+ * @param window->vkPhysicalDevs A pointer to a VkPhysicalDevice* to store the dynamically allocated array.
  */
-void query_devices(VkInstance instance, unsigned *pPhyDevCt, VkPhysicalDevice **ppDevices) {
+void query_devices(Window *window) {
     // Vulkan uses uint32_t for counts, but we'll use 'unsigned' as requested
-    uint32_t count = 0;
     VkResult res;
 
     // Initialize output pointers to a safe state
-    if (pPhyDevCt) *pPhyDevCt = 0;
-    if (ppDevices) *ppDevices = NULL;
+    if (window->vkPhysicalDevCount) window->vkPhysicalDevCount = 0;
+    if (window->vkPhysicalDevs) window->vkPhysicalDevs = NULL;
 
     // --- 1. Get the number of physical devices (Count phase) ---
     // Note: We use a local uint32_t 'count' to ensure type compatibility with vkEnumeratePhysicalDevices
-    res = vkEnumeratePhysicalDevices(instance, &count, NULL);
+    res = vkEnumeratePhysicalDevices(window->vkInstance, &window->vkPhysicalDevCount, NULL);
 
     if (res != VK_SUCCESS) {
         fprintf(stderr, "Error: Failed to query physical device count (VkResult: %d).\n", res);
         return;
     }
 
-    if (count == 0) {
+    if (window->vkPhysicalDevCount == 0) {
         fprintf(stderr, "Warning: No physical devices with Vulkan support found.\n");
         return;
     }
 
-    // --- 2. Dynamic Memory Allocation ---
-    if (ppDevices == NULL) {
-        fprintf(stderr, "Error: ppDevices pointer is NULL, cannot allocate memory.\n");
-        return;
-    }
-
     // Allocate memory on the heap (The fix for the stack allocation error)
-    *ppDevices = (VkPhysicalDevice *)malloc(count * sizeof(VkPhysicalDevice));
-    if (*ppDevices == NULL) {
-        fprintf(stderr, "Fatal Error: Failed to allocate memory for %u physical devices.\n", count);
+    window->vkPhysicalDevs = malloc(window->vkPhysicalDevCount * sizeof(VkPhysicalDevice));
+    if (window->vkPhysicalDevs == NULL) {
+        fprintf(stderr, "Fatal Error: Failed to allocate memory for %u physical devices.\n", window->vkPhysicalDevCount);
         return;
     }
 
     // --- 3. Get the physical devices (Population phase) ---
     // Pass the allocated array pointer to retrieve the device handles
-    res = vkEnumeratePhysicalDevices(instance, &count, *ppDevices);
+    res = vkEnumeratePhysicalDevices(window->vkInstance, &window->vkPhysicalDevCount, window->vkPhysicalDevs);
 
     if (res != VK_SUCCESS && res != VK_INCOMPLETE) {
         fprintf(stderr, "Error: Failed to enumerate physical devices (VkResult: %d).\n", res);
         // Clean up allocated memory on failure
-        free(*ppDevices);
-        *ppDevices = NULL;
+        free(window->vkPhysicalDevs);
+        window->vkPhysicalDevs = NULL;
         return;
     }
 
     // --- 4. Success: Set the final count and devices for the caller ---
-    if (pPhyDevCt) {
-        *pPhyDevCt = (unsigned)count;
+    if (window->vkPhysicalDevCount) {
+        window->vkPhysicalDevCount = (unsigned)window->vkPhysicalDevCount;
     }
 
-    printf("Successfully found and retrieved %u physical device(s).\n", count);
+    printf("Successfully found and retrieved %u physical device(s).\n", window->vkPhysicalDevCount);
 }

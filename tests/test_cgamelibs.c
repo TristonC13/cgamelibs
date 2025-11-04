@@ -28,6 +28,8 @@ int main() {
     // 2. Create the Vulkan instance
     // Now glfwGetRequiredInstanceExtensions will work correctly.
     init_vkinstance(&window);
+
+    query_devices(&window);
     
     // 3. Create the window surface
     init_surface(&window);

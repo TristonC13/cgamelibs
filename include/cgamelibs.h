@@ -3,18 +3,6 @@
 #include "GLFW/glfw3.h"
 
 /**
- * Queries and allocates memory for Vulkan physical devices.
- * The caller is responsible for freeing the memory allocated to *ppDevices.
- *
- * @param instance The active Vulkan instance.
- * @param pPhyDevCt A pointer to an unsigned integer to store the device count.
- * @param ppDevices A pointer to a VkPhysicalDevice* to store the dynamically
- * allocated array.
- */
-void query_devices(VkInstance instance, unsigned *pPhyDevCt,
-                   VkPhysicalDevice **ppDevices);
-
-/**
  * @struct Window
  * @brief A structure representing the main game window.
  *
@@ -53,7 +41,38 @@ typedef struct {
    * and is essential for Vulkan's rendering pipeline.
    */
   VkSurfaceKHR vkSurfaceKHR;
+
+  /**
+   * @brief Array of handles to physical devices available to the Vulkan
+   * application.
+   *
+   * This member stores pointers to VkPhysicalDevice handles, allowing
+   * the application to manage and interact with multiple physical devices
+   * as needed. The array can be used to query device properties,
+   * capabilities, and to select the most suitable device for rendering.
+   *
+   * @note Ensure to manage the memory of this array appropriately,
+   * especially when dealing with multiple devices.
+   */
+  VkPhysicalDevice *vkPhysicalDevs;
+
+  /**
+   * @brief Number of physical devices available.
+   *
+   * This member holds the count of the physical devices stored in
+   * the vkPhysicalDevs array. It is essential for iterating over the
+   * array and managing device selection or queries.
+   */
+  unsigned vkPhysicalDevCount;
 } Window;
+
+/**
+ * Queries and allocates memory for Vulkan physical devices.
+ * The caller is responsible for freeing the memory allocated to *ppDevices.
+ *
+ * @param window The game window
+ */
+void query_devices(Window *window);
 
 /**
  * @brief Initializes GLFW and creates the window.
@@ -77,12 +96,12 @@ void init_surface(Window *window);
 /**
  * @brief Initializes the Vulkan instance for the specified window.
  *
- * This function sets up the Vulkan instance needed for rendering in the 
- * provided `Window` struct. It configures necessary parameters and creates 
+ * This function sets up the Vulkan instance needed for rendering in the
+ * provided `Window` struct. It configures necessary parameters and creates
  * the Vulkan instance, linking it to the window.
  *
- * @param win Pointer to a `Window` struct where the Vulkan instance 
- *            will be initialized. This instance is essential for all Vulkan 
+ * @param win Pointer to a `Window` struct where the Vulkan instance
+ *            will be initialized. This instance is essential for all Vulkan
  *            operations related to this window.
  */
 void init_vkinstance(Window *win);
