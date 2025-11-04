@@ -13,8 +13,7 @@ const int HEIGHT = 600;
 // Function declarations
 void mainLoop(GLFWwindow* window);
 void cleanup(GLFWwindow* window, VkInstance instance, VkSurfaceKHR surface);
-void createInstance(VkInstance *instance);
-void createSurface(GLFWwindow* window, VkInstance pvkinstance, VkSurfaceKHR* surface);
+//void create_instance(VkInstance *instance);
 
 int main() {
     Window window;
@@ -28,10 +27,10 @@ int main() {
     
     // 2. Create the Vulkan instance
     // Now glfwGetRequiredInstanceExtensions will work correctly.
-    createInstance(&vk_instance);
+    init_vkinstance(&window);
     
     // 3. Create the window surface
-    createSurface(window.glfwWindow, vk_instance, &vk_surface);
+    init_surface(&window);
     
     mainLoop(window.glfwWindow);
     
@@ -39,63 +38,6 @@ int main() {
     cleanup(window.glfwWindow, vk_instance, vk_surface); // **Updated call**
 
     return 0;
-}
-
-// --- Helper Function for Instance Creation ---
-void createInstance(VkInstance *instance) {
-    // 1. Specify application info (Correct, no change)
-    VkApplicationInfo appInfo = {};
-    appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-    appInfo.pApplicationName = "Vulkan Hello World";
-    appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
-    appInfo.pEngineName = "No Engine";
-    appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
-    appInfo.apiVersion = VK_API_VERSION_1_0;
-
-    // 2. Specify instance creation info
-    VkInstanceCreateInfo createInfo = {};
-    createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-    createInfo.pApplicationInfo = &appInfo;
-
-    // 3. **CRITICAL FIX AREA** Get extensions required by GLFW
-    uint32_t glfwExtensionCount = 0;
-    const char** glfwExtensions;
-    
-    // First call to get the count and the list
-    glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
-    
-    if (glfwExtensionCount == 0 || glfwExtensions == NULL) {
-        // This is a common point of failure if Vulkan is not installed
-        // or a needed library (like the Vulkan loader) isn't found.
-        fprintf(stderr, "Failed to get required GLFW instance extensions! Check Vulkan SDK/Drivers.\n");
-        exit(EXIT_FAILURE);
-    }
-
-    createInfo.enabledExtensionCount = glfwExtensionCount;
-    createInfo.ppEnabledExtensionNames = glfwExtensions;
-    
-    printf("Enabling %u Vulkan instance extensions required by GLFW.\n", glfwExtensionCount);
-
-    // 4. Create the instance
-    VkResult result = vkCreateInstance(&createInfo, NULL, instance);
-    if (result != VK_SUCCESS) {
-        // Now you'll get a better error code if the extension isn't present for a different reason
-        fprintf(stderr, "Failed to create Vulkan instance! VkResult: %d\n", result);
-        exit(EXIT_FAILURE);
-    }
-    printf("Vulkan Instance created successfully.\n");
-}
-
-// --- Helper Function for Surface Creation ---
-void createSurface(GLFWwindow* window, VkInstance pvkinstance, VkSurfaceKHR* surface) {
-    // GLFW has a built-in function to create a surface from the window
-    int retval = glfwCreateWindowSurface(pvkinstance, window, NULL, surface);
-    if (retval != VK_SUCCESS) {
-        fprintf(stderr, "Failed to create window surface!\nReason: %d\n", retval);
-        exit(EXIT_FAILURE);
-    }
-
-    printf("Vulkan Window Surface created successfully.\n");
 }
 
 /**

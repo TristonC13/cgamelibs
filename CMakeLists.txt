@@ -8,6 +8,8 @@ set(SOURCES
     src/cgamelibs.c
     src/render/devices.c
     src/render/window.c
+    src/render/surfaces.c
+    src/render/vkinstance.c
 )
 
 # Specify the header files (if any)
