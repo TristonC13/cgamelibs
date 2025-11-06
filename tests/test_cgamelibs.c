@@ -58,4 +58,6 @@ void mainLoop(GLFWwindow* window) {
         // the window will appear **blank** or with residual desktop content, 
         // which fulfills the requirement of this basic example.
     }
+
+    glfwTerminate();
 }
