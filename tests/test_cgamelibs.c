@@ -41,8 +41,6 @@ int main() {
     deinit_vkinstance(&window);
     deinit_window(&window);
 
-    glfwTerminate();
-
     return 0;
 }
 
