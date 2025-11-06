@@ -25,3 +25,24 @@ void init_surface(Window *window) {
         exit(EXIT_FAILURE);
     }
 }
+
+/**
+ * @brief Cleans up and destroys the Vulkan surface associated with the window.
+ *
+ * This function uses vkDestroySurfaceKHR to release the resources held by 
+ * the Vulkan surface handle stored in the `Window` struct. This must be 
+ * called before the Vulkan instance itself is destroyed.
+ *
+ * @param window Pointer to the `Window` struct containing the Vulkan 
+ * instance (`vkInstance`) and the surface handle 
+ * (`vkSurfaceKHR`) to be destroyed.
+ */
+void deinit_surface(Window *window) {
+    // The surface is an object of the Instance. 
+    // It must be destroyed before the Instance is destroyed.
+    vkDestroySurfaceKHR(window->vkInstance, window->vkSurfaceKHR, NULL);
+    
+    // Optional: Set the handle to VK_NULL_HANDLE after destruction 
+    // to prevent accidental use (often a good practice).
+    window->vkSurfaceKHR = VK_NULL_HANDLE; 
+}

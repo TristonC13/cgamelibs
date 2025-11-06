@@ -33,3 +33,26 @@ void init_window(Window* window, int wPx, int hPx) {
     
     printf("GLFW window created successfully.\n");
 }
+
+/**
+ * @brief Destroys the GLFW window and terminates the GLFW library.
+ *
+ * This function releases all resources associated with the GLFW window
+ * and then terminates the GLFW library, which must be the last step
+ * of any GLFW cleanup.
+ *
+ * @param window Pointer to the `Window` struct containing the GLFW 
+ * window handle (`glfwWindow`).
+ */
+void deinit_window(Window *window) {
+    // 1. Destroy the specific window handle
+    if (window->glfwWindow) {
+        glfwDestroyWindow(window->glfwWindow);
+        window->glfwWindow = NULL; // Optional: Null the pointer
+        printf("GLFW window destroyed.\n");
+    }
+
+    // 2. Terminate the GLFW library (releases internal resources)
+    glfwTerminate();
+    printf("GLFW terminated.\n");
+}

@@ -11,7 +11,7 @@
  * @param window The game window
  * @param window->vkPhysicalDevs A pointer to a VkPhysicalDevice* to store the dynamically allocated array.
  */
-void query_devices(Window *window) {
+void init_devices(Window *window) {
     // Vulkan uses uint32_t for counts, but we'll use 'unsigned' as requested
     VkResult res;
 
@@ -58,4 +58,29 @@ void query_devices(Window *window) {
     }
 
     printf("Successfully found and retrieved %u physical device(s).\n", window->vkPhysicalDevCount);
+}
+
+/**
+ * @brief Frees Vulkan physical device handles previously allocated by init_devices.
+ *
+ * Frees the memory pointed to by window->vkPhysicalDevs and resets the count.
+ * Safe to call multiple times; silently returns if window is NULL or vkPhysicalDevs is NULL.
+ *
+ * Example usage:
+ * @code
+ * init_devices(&window);
+ * // ... use devices ...
+ * deinit_devices(&window);
+ * @endcode
+ *
+ * @param[in,out] window Pointer to the Window structure that owns the device array.
+ */
+void deinit_devices(Window *window) {
+    if (window == NULL) return;
+
+    if (window->vkPhysicalDevs) {
+        free(window->vkPhysicalDevs);
+        window->vkPhysicalDevs = NULL;
+    }
+    window->vkPhysicalDevCount = 0;
 }

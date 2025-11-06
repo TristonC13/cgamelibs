@@ -46,3 +46,25 @@ void init_vkinstance(Window *win) {
     }
     printf("Vulkan Instance created successfully.\n");
 }
+
+/**
+ * @brief Cleans up and destroys the Vulkan instance.
+ *
+ * This function uses vkDestroyInstance to release all resources associated 
+ * with the Vulkan instance handle stored in the `Window` struct. This is 
+ * typically the *last* Vulkan-related cleanup step before application exit.
+ *
+ * @param window Pointer to the `Window` struct containing the Vulkan 
+ * instance (`vkInstance`) to be destroyed.
+ */
+void deinit_vkinstance(Window *win) {
+    // The vkDestroyInstance function destroys the specified VkInstance.
+    // All child objects (like the surface) must have been destroyed 
+    // before this function is called.
+    vkDestroyInstance(win->vkInstance, NULL);
+    
+    // Optional: Set the handle to VK_NULL_HANDLE after destruction 
+    // to prevent accidental use (good practice).
+    win->vkInstance = VK_NULL_HANDLE;
+    printf("Vulkan Instance destroyed successfully.\n");
+}

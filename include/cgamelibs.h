@@ -72,7 +72,7 @@ typedef struct {
  *
  * @param window The game window
  */
-void query_devices(Window *window);
+void init_devices(Window *window);
 
 /**
  * @brief Initializes GLFW and creates the window.
@@ -105,3 +105,57 @@ void init_surface(Window *window);
  *            operations related to this window.
  */
 void init_vkinstance(Window *win);
+
+/**
+ * @brief Frees Vulkan physical device handles previously allocated by init_devices.
+ *
+ * Frees the memory pointed to by window->vkPhysicalDevs and resets the count.
+ * Safe to call multiple times; silently returns if window is NULL or vkPhysicalDevs is NULL.
+ *
+ * Example usage:
+ * @code
+ * init_devices(&window);
+ * // ... use devices ...
+ * deinit_devices(&window);
+ * @endcode
+ *
+ * @param[in,out] window Pointer to the Window structure that owns the device array.
+ */
+void deinit_devices(Window *window);
+
+/**
+ * @brief Cleans up and destroys the Vulkan surface associated with the window.
+ *
+ * This function uses vkDestroySurfaceKHR to release the resources held by 
+ * the Vulkan surface handle stored in the `Window` struct. This must be 
+ * called before the Vulkan instance itself is destroyed.
+ *
+ * @param window Pointer to the `Window` struct containing the Vulkan 
+ * instance (`vkInstance`) and the surface handle 
+ * (`vkSurfaceKHR`) to be destroyed.
+ */
+void deinit_surface(Window *window);
+
+/**
+ * @brief Destroys the GLFW window and terminates the GLFW library.
+ *
+ * This function releases all resources associated with the GLFW window
+ * and then terminates the GLFW library, which must be the last step
+ * of any GLFW cleanup.
+ *
+ * @param window Pointer to the `Window` struct containing the GLFW 
+ * window handle (`glfwWindow`).
+ */
+void deinit_window(Window *window);
+
+/**
+ * @brief Cleans up and destroys the Vulkan instance.
+ *
+ * This function uses vkDestroyInstance to release all resources associated 
+ * with the Vulkan instance handle stored in the `Window` struct. This is 
+ * typically the *last* Vulkan-related cleanup step before application exit.
+ *
+ * @param window Pointer to the `Window` struct containing the Vulkan 
+ * instance (`vkInstance`) to be destroyed.
+ */
+void deinit_vkinstance(Window *win);

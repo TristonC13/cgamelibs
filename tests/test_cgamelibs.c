@@ -29,7 +29,7 @@ int main() {
     // Now glfwGetRequiredInstanceExtensions will work correctly.
     init_vkinstance(&window);
 
-    query_devices(&window);
+    init_devices(&window);
     
     // 3. Create the window surface
     init_surface(&window);
@@ -37,7 +37,11 @@ int main() {
     mainLoop(window.glfwWindow);
     
     // 4. Cleanup Vulkan and GLFW resources
-    cleanup(window.glfwWindow, vk_instance, vk_surface); // **Updated call**
+    deinit_surface(&window);
+    deinit_vkinstance(&window);
+    deinit_window(&window);
+
+    glfwTerminate();
 
     return 0;
 }
@@ -56,29 +60,4 @@ void mainLoop(GLFWwindow* window) {
         // the window will appear **blank** or with residual desktop content, 
         // which fulfills the requirement of this basic example.
     }
-}
-
-/**
- * @brief Cleans up Vulkan and GLFW resources.
- * @param window The GLFWwindow pointer.
- * @param instance The VkInstance to destroy.
- * @param surface The VkSurfaceKHR to destroy.
- */
-void cleanup(GLFWwindow* window, VkInstance instance, VkSurfaceKHR surface) {
-    // 1. Destroy the Vulkan surface
-    if (surface != VK_NULL_HANDLE) {
-        vkDestroySurfaceKHR(instance, surface, NULL);
-        printf("Vulkan Window Surface destroyed.\n");
-    }
-
-    // 2. Destroy the Vulkan instance
-    if (instance != VK_NULL_HANDLE) {
-        vkDestroyInstance(instance, NULL);
-        printf("Vulkan Instance destroyed.\n");
-    }
-
-    // 3. Destroy the GLFW window and terminate GLFW
-    glfwDestroyWindow(window);
-    glfwTerminate();
-    printf("Program terminated successfully.\n");
 }
