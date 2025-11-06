@@ -39,6 +39,7 @@ int main() {
     // 4. Cleanup Vulkan and GLFW resources
     deinit_surface(&window);
     deinit_vkinstance(&window);
+    deinit_devices(&window);
     deinit_window(&window);
 
     return 0;
