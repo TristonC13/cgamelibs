@@ -34,7 +34,16 @@ add_library(cgamelibs STATIC ${SOURCES} ${HEADERS})
 find_package(Vulkan REQUIRED)
 
 # Find GLFW
-find_package(glfw3 REQUIRED)
+find_package(glfw3 QUIET)
+if(NOT glfw3_FOUND)
+    message("glfw3 not found by find_package! Falling back to FetchContent!")
+    include(FetchContent)
+    FetchContent_Declare(glfw GIT_REPOSITORY https://github.com/glfw/glfw.git GIT_TAG master)
+    set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+    set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+    set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+    FetchContent_MakeAvailable(glfw)
+endif ()
 
 # Specify the include directory for this library
 target_include_directories(cgamelibs PUBLIC
