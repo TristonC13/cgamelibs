@@ -1,3 +1,5 @@
+#ifndef CGAMELIBS_H
+#define CGAMELIBS_H
 #include <vulkan/vulkan_core.h>
 
 #include "GLFW/glfw3.h"
@@ -78,7 +80,7 @@ void init_devices(Window *window);
  * @brief Initializes GLFW and creates the window.
  * @param window A pointer to the Window to be initialized.
  */
-void init_window(Window *window, int wPx, int hPx);
+void init_window(Window *window, const uint16_t wPx, const uint16_t hPx); // should handle a maximum of 65535 X 65535, consider making these floats for subpixel precision/rendering.
 
 /**
  * @brief Creates a Vulkan surface associated with the specified window.
@@ -159,3 +161,4 @@ void deinit_window(Window *window);
  * instance (`vkInstance`) to be destroyed.
  */
 void deinit_vkinstance(Window *win);
+#endif
