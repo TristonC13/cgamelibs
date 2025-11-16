@@ -6,6 +6,9 @@ project(cgamelibs C)
 # Specify the source files
 set(SOURCES
     src/cgamelibs.c
+
+    src/hashtable/hashtable.c
+    
     src/render/devices.c
     src/render/window.c
     src/render/surfaces.c
