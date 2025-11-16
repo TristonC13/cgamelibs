@@ -29,7 +29,7 @@ void test_insert_after() {
 	assert(head.pnext->pprev == &head);
 	assert(head.pnext->pnext == NULL);
 
-    free(newNode);
+	free(newNode);
 
 	printf("Passed test_insert_after.\n");
 }
@@ -77,7 +77,7 @@ void test_has_next() {
 
 	assert(IntNode_has_next(&head)); // Now there should be a next node
 
-    free(newNode);
+	free(newNode);
 
 	printf("Passed test_has_next.\n");
 }
