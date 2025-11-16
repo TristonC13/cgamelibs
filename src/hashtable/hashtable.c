@@ -2,11 +2,8 @@
 #include "hashtable/hash.h"
 #include "string.h"
 
-DEF_HASH_FN_NULLTERM(unsigned);
-DEF_HASH_FN_SIZED(unsigned);
-
-#define hash_key(key) hash_unsigned_nullterm(key)
-#define hash_key_s(key, len) hash_unsigned_sized(key, len)
+DEF_HASH_FN_NULLTERM(unsigned, hash_key);
+DEF_HASH_FN_SIZED(unsigned, hash_key_s);
 
 void ht_init_table(HtTable *tab, unsigned bucket_count) {
 	tab->buckets = htmalloc(sizeof(HtNode *) * bucket_count);
