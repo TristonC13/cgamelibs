@@ -6,9 +6,6 @@
 #include "string.h"  // String manipulation functions (strcpy)
 #include "stdbool.h" // bool type
 
-// Include hash function definition
-#include "hashtable/hash.h"
-
 // Memory management macros for simplified allocation and deallocation
 #define htmalloc(size) malloc(size)
 #define htfree(p) free(p)
@@ -16,7 +13,7 @@
 // Struct definition for a node in the hash table's linked list
 typedef struct HtNode
 {
-    unsigned char *key;   // Key for the hash table entry
+    char *key;   // Key for the hash table entry
     void *value;          // Value associated with the key
     struct HtNode *pnext; // Pointer to the next node for handling collisions
 } HtNode;
@@ -47,7 +44,7 @@ void ht_init_table(HtTable *tab, unsigned bucket_count);
  * @param value The value associated with the key.
  * @return True if the insertion is successful, false otherwise.
  */
-bool ht_insert(HtTable *tab, const unsigned char *key, void *value);
+bool ht_insert(HtTable *tab, void *key, void *value);
 
 /**
  * Inserts a key-value pair into the hash table, with a given key size
@@ -58,7 +55,7 @@ bool ht_insert(HtTable *tab, const unsigned char *key, void *value);
  * @param value The value associated with the key.
  * @return True if the insertion is successful, false otherwise.
  */
-bool ht_insert_s(HtTable *tab, const unsigned char *key, size_t keylen, void *value);
+bool ht_insert_s(HtTable *tab, char *key, size_t keylen, void *value);
 
 /**
  * Deletes a key-value pair from the hash table.
@@ -67,7 +64,7 @@ bool ht_insert_s(HtTable *tab, const unsigned char *key, size_t keylen, void *va
  * @param key The key to delete.
  * @return True if the deletion is successful, false if the key was not found.
  */
-bool ht_delete(HtTable *tab, const unsigned char *key);
+bool ht_delete(HtTable *tab, void *key);
 
 /**
  * Searches for a value by key in the hash table.
@@ -76,7 +73,7 @@ bool ht_delete(HtTable *tab, const unsigned char *key);
  * @param key The key to search for.
  * @return Pointer to the value associated with the key, or NULL if not found.
  */
-void *ht_search(HtTable *tab, const unsigned char *key);
+void *ht_search(HtTable *tab, void *key);
 
 /**
  * Deinitializes a hash table and frees its resources.

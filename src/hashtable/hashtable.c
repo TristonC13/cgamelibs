@@ -1,4 +1,5 @@
 #include "hashtable/hashtable.h"
+#include "hashtable/hash.h"
 
 DEF_HASH_FN_NULLTERM(unsigned);
 
@@ -37,7 +38,7 @@ void ht_deinit_table(HtTable *tab)
     tab->element_count = 0; // Reset element count
 }
 
-bool ht_insert_s(HtTable *tab, const unsigned char *key, size_t keylen, void *value)
+bool ht_insert_s(HtTable *tab, char *key, size_t keylen, void *value)
 {
     unsigned int idx = hash_key(key) % tab->bucket_count;
 
@@ -79,13 +80,13 @@ bool ht_insert_s(HtTable *tab, const unsigned char *key, size_t keylen, void *va
     return true;
 }
 
-bool ht_insert(HtTable *tab, const unsigned char *key, void *value)
+bool ht_insert(HtTable *tab, void *key, void *value)
 {
     size_t len = strlen(key);
     return ht_insert_s(tab, key, len, value);
 }
 
-bool ht_delete(HtTable *tab, const unsigned char *key)
+bool ht_delete(HtTable *tab, void *key)
 {
     // Calculate the bucket index using the hash function
     unsigned int idx = hash_key(key) % tab->bucket_count;
@@ -120,7 +121,7 @@ bool ht_delete(HtTable *tab, const unsigned char *key)
     return false;
 }
 
-void *ht_search(HtTable *tab, const unsigned char *key)
+void *ht_search(HtTable *tab, void *key)
 {
     // Getting the bucket index for the given key
     unsigned int bucketIndex = hash_key(key) % tab->bucket_count;
