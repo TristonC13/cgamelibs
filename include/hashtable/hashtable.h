@@ -45,7 +45,7 @@ void ht_init_table(HtTable *tab, unsigned bucket_count);
  * @param value Pointer to the value associated with the key.
  * @return True if the insertion (or update) is successful, false otherwise.
  */
-bool ht_insert(HtTable *tab, char *key, void *value);
+bool ht_emplace(HtTable *tab, char *key, void *value);
 
 /**
  * Inserts a key-value pair into the hash table using a specified key size. This is useful for non-string keys. 
@@ -57,7 +57,7 @@ bool ht_insert(HtTable *tab, char *key, void *value);
  * @param value Pointer to the value associated with the key.
  * @return True if the insertion is successful, false otherwise.
  */
-bool ht_insert_s(HtTable *tab, void *key, size_t keylen, void *value);
+bool ht_emplace_s(HtTable *tab, void *key, size_t keylen, void *value);
 
 /**
  * Deletes a key-value pair from the hash table. 
@@ -98,5 +98,15 @@ void *ht_search_s(HtTable *tab, void *key, size_t keylen);
  * @param tab Pointer to the hash table to deinitialize.
  */
 void ht_deinit_table(HtTable *tab);
+
+/**
+ * Checks if a key exists in the hash table.
+ * This function returns true if the key is found, and false otherwise.
+ *
+ * @param tab Pointer to the hash table.
+ * @param key Pointer to the key to check (must be a null-terminated string).
+ * @return True if the key exists in the hash table, false otherwise.
+ */
+bool ht_has(HtTable *tab, void *key);
 
 #endif // HASHTABLE_H

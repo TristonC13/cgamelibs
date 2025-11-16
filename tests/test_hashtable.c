@@ -21,8 +21,8 @@ void test_hashtable_basic_operations() {
     struct test_t test2 = {3, 4};
 
     // Insert test data into the hash table
-    ht_insert(map, "Test1", &test1);
-    ht_insert(map, "Test2", &test2);
+    ht_emplace(map, "Test1", &test1);
+    ht_emplace(map, "Test2", &test2);
 
     // Verify that the elements have been correctly inserted into the hash table
     assert(ht_search(map, "Test1") != NULL); // Assert existence of test1
@@ -52,11 +52,11 @@ void test_hashtable_duplicate_insertions() {
     struct test_t test1 = {1, 2};
     
     // Insert the test data into the hash table
-    ht_insert_s(map, "Test1", 5, &test1);
+    ht_emplace_s(map, "Test1", 5, &test1);
     assert(map->element_count == 1); // Should have 1 element
 
     // Attempt inserting the same key again
-    ht_insert_s(map, "Test1", 5, &test1);
+    ht_emplace_s(map, "Test1", 5, &test1);
     assert(map->element_count == 1); // Count should remain 1
     assert(ht_search(map, "Test1") == &test1); // Verify data consistency
 
@@ -77,7 +77,7 @@ void test_hashtable_deletion() {
     struct test_t test1 = {1, 2};
     
     // Insert the test data into the hash table
-    ht_insert_s(map, "Test1", 5, &test1);
+    ht_emplace_s(map, "Test1", 5, &test1);
     assert(map->element_count == 1); // There should be 1 element in the table
     
     // Delete the inserted entry

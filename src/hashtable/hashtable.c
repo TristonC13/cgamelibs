@@ -41,53 +41,73 @@ void ht_deinit_table(HtTable *tab)
     tab->element_count = 0; // Reset element count
 }
 
-bool ht_insert_s(HtTable *tab, void *key, size_t keylen, void *value)
-{
+bool ht_has(HtTable *tab, void *key) {
+    // Calculate the bucket index using the hash function
+    unsigned int idx = hash_key(key) % tab->bucket_count;
+
+    // Get the head of the linked list at the calculated bucket index
+    HtNode *currNode = tab->buckets[idx];
+
+    // Traverse the linked list to check for the key
+    while (currNode != NULL) {
+        if (strcmp((const char *)currNode->key, (const char *)key) == 0) {
+            return true; // Key found
+        }
+        currNode = currNode->pnext; // Move to the next node
+    }
+
+    return false; // Key not found
+}
+
+bool ht_emplace_s(HtTable *tab, void *key, size_t keylen, void *value) {
     unsigned int idx = hash_key_s(key, keylen) % tab->bucket_count;
 
-    // Create a new node.
+    // Check for duplicates by traversing the linked list in the bucket
+    HtNode *currNode = tab->buckets[idx];
+    while (currNode != NULL) {
+        // Compare the keys
+        if (strncmp(currNode->key, key, keylen) == 0) {
+            // Key already exists, update the value
+            currNode->value = value; // Update the existing value
+            return true; // Insertion successful
+        }
+        currNode = currNode->pnext; // Move to next node
+    }
+
+    // Create a new node since the key is unique
     HtNode *new_node = htmalloc(sizeof(HtNode));
-    if (!new_node)
-    {
-        // Handle allocation failure.
+    if (!new_node) {
+        // Handle allocation failure
         return false;
     }
 
     new_node->key = htmalloc(keylen + 1);
+    if (!new_node->key) {
+        // Handle key allocation failure
+        htfree(new_node); // Free the node allocated
+        return false;
+    }
 
 #ifdef strcpy_s
     strcpy_s(new_node->key, keylen + 1, key);
 #else
-    strncpy(new_node->key, key, keylen + 1);
+    strncpy(new_node->key, key, keylen);
     new_node->key[keylen] = '\0'; // Ensure null-termination
 #endif
 
-    new_node->value = value;
+    new_node->value = value;   // Assign the new value
+    new_node->pnext = tab->buckets[idx]; // Insert at the head of the list
+    tab->buckets[idx] = new_node; // Update the bucket
 
-    new_node->pnext = NULL;
+    ++(tab->element_count); // Increase the count of elements
 
-    // Insert into the hash table bucket.
-    if (tab->buckets[idx] == NULL)
-    {
-        // No collision, simply insert the new node.
-        tab->buckets[idx] = new_node;
-    }
-    else
-    {
-        // Handle collision: insert at the beginning of the linked list.
-        new_node->pnext = tab->buckets[idx]; // Point to the current first node
-        tab->buckets[idx] = new_node;        // Update the bucket to point to the new node
-    }
-
-    ++(tab->element_count); // Increase the count of elements.
-
-    return true;
+    return true; // Insertion successful
 }
 
-bool ht_insert(HtTable *tab, char *key, void *value)
+bool ht_emplace(HtTable *tab, char *key, void *value)
 {
     size_t len = strlen(key);
-    return ht_insert_s(tab, key, len, value);
+    return ht_emplace_s(tab, key, len, value);
 }
 
 bool ht_delete(HtTable *tab, void *key)
