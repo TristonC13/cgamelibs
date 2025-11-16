@@ -16,7 +16,7 @@
  *      void deinit_VEC_T(VEC_T *vec);
  *      void realloc_VEC_T(VEC_T *vec, size_t new_capacity);
  */
-#define DEF_VECTOR(ELEM_T, VEC_T)                                           \
+#define DEF_VECTOR(ELEM_T, VEC_T)                                              \
                                                                                \
 	/* vector struct */                                                        \
 	typedef struct {                                                           \
@@ -72,5 +72,5 @@
 		vec->capacity = new_capacity;                                          \
 		if (vec->count > new_capacity) vec->count = new_capacity;              \
 	}
-    
+
 #endif
