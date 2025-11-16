@@ -1,34 +1,31 @@
-Language: C
+# .clang-format
+
 BasedOnStyle: LLVM
 IndentWidth: 4
 TabWidth: 4
 UseTab: Always
-BreakBeforeBraces: Attach
-AllowShortBlocksOnASingleLine: Empty
-AllowShortCaseLabelsOnASingleLine: true
-AllowShortIfStatementsOnASingleLine: true
-AllowShortLoopsOnASingleLine: true
-ColumnLimit: 80
-MaxEmptyLinesToKeep: 1
-SpaceBeforeParens: ControlStatements
-SpaceAfterCStyleCast: true
-SpacesInParentheses: false
-SpaceBeforeSquareBrackets: false
-SpacesBeforeTrailingComments: 1
-CommentPragmas: Keep
-AlignTrailingComments: true
 
-# Modern style additions
+# Specific to Java style
+ColumnLimit: 120    # Set to a reasonable limit for readability
+AllowShortBlocksOnASingleLine: Empty
+AllowShortFunctionsOnASingleLine: Empty
+# AllowShortLinesOnASingleLine: true
+BreakBeforeBraces: Attach  # Use 'Attach' style for braces, similar to Java
+SpaceBeforeParens: ControlStatements # Place space before '(' in control statements
+
+# Alignments
+AlignTrailingComments: true
+AlignConsecutiveDeclarations: true
+
+# C++ style specific behaviors
+SpacesInParentheses: false
+SpaceAfterCStyleCast: true
+
+# Misc formats
 SortIncludes: true
 IncludeBlocks: Preserve
 IncludeCategories:
   - Regex: '^<.*>'
-    Priority: 1
-  - Regex: '^[\"<].*[\">]$'
     Priority: 2
-  - Regex: '.*'
-    Priority: 3
-AlignAfterOpenBracket: Align
-BinPackParameters: true
-BinPackArguments: true
-AlignConsecutiveDeclarations: true
+  - Regex: '^".*"$'
+    Priority: 1

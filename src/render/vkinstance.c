@@ -1,6 +1,6 @@
+#include "cgamelibs.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "cgamelibs.h"
 
 // --- Helper Function for Instance Creation ---
 void init_vkinstance(Window *const win) {
@@ -28,25 +28,22 @@ void init_vkinstance(Window *const win) {
 	if (glfwExtensionCount == 0 || glfwExtensions == NULL) {
 		// This is a common point of failure if Vulkan is not installed
 		// or a needed library (like the Vulkan loader) isn't found.
-		fprintf(stderr,
-				"Failed to get required GLFW instance extensions! Check "
-				"Vulkan SDK/Drivers.\n");
+		fprintf(stderr, "Failed to get required GLFW instance extensions! Check "
+						"Vulkan SDK/Drivers.\n");
 		exit(EXIT_FAILURE);
 	}
 
 	createInfo.enabledExtensionCount = glfwExtensionCount;
 	createInfo.ppEnabledExtensionNames = glfwExtensions;
 
-	printf("Enabling %u Vulkan instance extensions required by GLFW.\n",
-		   glfwExtensionCount);
+	printf("Enabling %u Vulkan instance extensions required by GLFW.\n", glfwExtensionCount);
 
 	// 4. Create the instance
 	VkResult result = vkCreateInstance(&createInfo, NULL, &win->vkInstance);
 	if (result != VK_SUCCESS) {
 		// Now you'll get a better error code if the extension isn't present for
 		// a different reason
-		fprintf(stderr, "Failed to create Vulkan instance! VkResult: %d\n",
-				result);
+		fprintf(stderr, "Failed to create Vulkan instance! VkResult: %d\n", result);
 		exit(EXIT_FAILURE);
 	}
 	printf("Vulkan Instance created successfully.\n");

@@ -1,7 +1,7 @@
+#include "GLFW/glfw3.h"
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "GLFW/glfw3.h"
 
 #include "cgamelibs.h"
 
@@ -26,8 +26,7 @@ void init_window(Window *const window, const uint16_t wPx,
 	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
 	// Create the window
-	window->glfwWindow =
-		glfwCreateWindow(wPx, hPx, "Vulkan Hello World", NULL, NULL);
+	window->glfwWindow = glfwCreateWindow(wPx, hPx, "Vulkan Hello World", NULL, NULL);
 	glfwSetWindowSize(window->glfwWindow, wPx, hPx);
 
 	if (!window->glfwWindow) {

@@ -55,11 +55,12 @@ void test_delete_next() {
 	// Perform deletion
 	IntNode *removed = IntNode_remove_next(&head); // Deletes secondNode
 
-	if (removed) free(removed);
+	if (removed)
+		free(removed);
 
 	// After deletion
-	assert(head.pnext != NULL);	   // Head still has a next node
-	assert(head.pnext->data == 3); // Now it points directly to the third node
+	assert(head.pnext != NULL);		   // Head still has a next node
+	assert(head.pnext->data == 3);	   // Now it points directly to the third node
 	assert(head.pnext->pnext == NULL); // Third node's next should be NULL
 
 	printf("Passed test_delete_next.\n");

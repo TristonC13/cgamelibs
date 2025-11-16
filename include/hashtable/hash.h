@@ -26,14 +26,14 @@
  * @note The macro does **not** perform any alignment checks; the caller must
  * ensure that `p_key` points to at least `len` bytes.
  */
-#define DEF_HASH_FN_SIZED(RET_TYPE, FN_NAME)                                   \
-	RET_TYPE FN_NAME(void *p_key, size_t len) {                                \
-		RET_TYPE hash = 0;                                                     \
-		for (unsigned i = 0; i < len; ++i) {                                   \
-			unsigned char byte = ((unsigned char *) p_key)[i];                 \
-			hash = (hash << 5) + byte;                                         \
-		}                                                                      \
-		return hash;                                                           \
+#define DEF_HASH_FN_SIZED(RET_TYPE, FN_NAME)                                                                           \
+	RET_TYPE FN_NAME(void *p_key, size_t len) {                                                                        \
+		RET_TYPE hash = 0;                                                                                             \
+		for (unsigned i = 0; i < len; ++i) {                                                                           \
+			unsigned char byte = ((unsigned char *) p_key)[i];                                                         \
+			hash = (hash << 5) + byte;                                                                                 \
+		}                                                                                                              \
+		return hash;                                                                                                   \
 	}
 
 /**
@@ -51,14 +51,14 @@
  *
  * The macro assumes the key occupies `sizeof(KEY_TYPE)` bytes.
  */
-#define DEF_HASH_FN_HEAP(RET_TYPE, KEY_TYPE, FN_NAME)                          \
-	RET_TYPE FN_NAME(void *p_key) {                                            \
-		RET_TYPE hash = 0;                                                     \
-		for (unsigned i = 0; i < sizeof(KEY_TYPE); ++i) {                      \
-			unsigned char byte = ((unsigned char *) p_key)[i];                 \
-			hash = (hash << 5) + byte;                                         \
-		}                                                                      \
-		return hash;                                                           \
+#define DEF_HASH_FN_HEAP(RET_TYPE, KEY_TYPE, FN_NAME)                                                                  \
+	RET_TYPE FN_NAME(void *p_key) {                                                                                    \
+		RET_TYPE hash = 0;                                                                                             \
+		for (unsigned i = 0; i < sizeof(KEY_TYPE); ++i) {                                                              \
+			unsigned char byte = ((unsigned char *) p_key)[i];                                                         \
+			hash = (hash << 5) + byte;                                                                                 \
+		}                                                                                                              \
+		return hash;                                                                                                   \
 	}
 
 /**
@@ -74,15 +74,15 @@
  * RET_TYPE FN_NAME(KEY_TYPE key);
  * @endcode
  */
-#define DEF_HASH_FN_STACK(RET_TYPE, KEY_TYPE, FN_NAME)                         \
-	RET_TYPE FN_NAME(KEY_TYPE key) {                                           \
-		KEY_TYPE *p_key = &key;                                                \
-		RET_TYPE  hash = 0;                                                    \
-		for (unsigned i = 0; i < sizeof(KEY_TYPE); ++i) {                      \
-			unsigned char byte = ((unsigned char *) p_key)[i];                 \
-			hash = (hash << 5) + byte;                                         \
-		}                                                                      \
-		return hash;                                                           \
+#define DEF_HASH_FN_STACK(RET_TYPE, KEY_TYPE, FN_NAME)                                                                 \
+	RET_TYPE FN_NAME(KEY_TYPE key) {                                                                                   \
+		KEY_TYPE *p_key = &key;                                                                                        \
+		RET_TYPE  hash = 0;                                                                                            \
+		for (unsigned i = 0; i < sizeof(KEY_TYPE); ++i) {                                                              \
+			unsigned char byte = ((unsigned char *) p_key)[i];                                                         \
+			hash = (hash << 5) + byte;                                                                                 \
+		}                                                                                                              \
+		return hash;                                                                                                   \
 	}
 
 /**
@@ -97,13 +97,13 @@
  * RET_TYPE FN_NAME(const char *key);
  * @endcode
  */
-#define DEF_HASH_FN_NULLTERM(RET_TYPE, FN_NAME)                                \
-	RET_TYPE FN_NAME(const char *key) {                                        \
-		RET_TYPE hash = 0;                                                     \
-		while (*key) {                                                         \
-			hash = (hash << 5) + *key++;                                       \
-		}                                                                      \
-		return hash;                                                           \
+#define DEF_HASH_FN_NULLTERM(RET_TYPE, FN_NAME)                                                                        \
+	RET_TYPE FN_NAME(const char *key) {                                                                                \
+		RET_TYPE hash = 0;                                                                                             \
+		while (*key) {                                                                                                 \
+			hash = (hash << 5) + *key++;                                                                               \
+		}                                                                                                              \
+		return hash;                                                                                                   \
 	}
 
 #endif /* HASH_H */

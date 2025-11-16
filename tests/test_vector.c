@@ -1,8 +1,8 @@
 /* test_intvecvec_manual.c */
+#include "vector/vector.h"
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "vector/vector.h"
 
 /* ------------------------------------------------------------------ */
 /* 1️⃣  Define the inner and outer vector types                         */
@@ -17,7 +17,8 @@ static void print_intvec(const IntVec *v) {
 	printf("IntVec { cap=%zu, cnt=%zu, data=[", v->capacity, v->count);
 	for (size_t i = 0; i < v->capacity; ++i) {
 		printf("%d", v->data[i]);
-		if (i + 1 < v->capacity) printf(", ");
+		if (i + 1 < v->capacity)
+			printf(", ");
 	}
 	printf("] }\n");
 }
@@ -114,8 +115,7 @@ int main(void) {
 	assert(outer.count == 0);
 	assert(outer.data == NULL);
 	printf("\n=== After full deinitialisation ===\n");
-	printf("outer: capacity=%zu, count=%zu, data=%p\n", outer.capacity,
-		   outer.count, (void *) outer.data);
+	printf("outer: capacity=%zu, count=%zu, data=%p\n", outer.capacity, outer.count, (void *) outer.data);
 
 	return 0;
 }
