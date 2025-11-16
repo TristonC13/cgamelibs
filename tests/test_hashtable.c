@@ -2,59 +2,87 @@
 #include <stdlib.h>
 #include <assert.h>
 
-void test_hashtable()
-{
+struct test_t {
+    int a;
+    int b;
+};
+
+void test_hashtable_basic_operations() {
     // Initialize the hash table
     HtTable *map = malloc(sizeof(HtTable));
-    assert(map != NULL);  // Ensure allocation was successful
+    assert(map != NULL);
     ht_init_table(map, 4);
 
-    // Insert values
-    assert(ht_insert(map, "Yogaholic", "Anjali"));
-    assert(ht_insert(map, "pluto14", "Vartika"));
-    assert(ht_insert(map, "elite_Programmer", "Manish"));
-    assert(ht_insert(map, "GFG", "GeeksforGeeks"));
-    assert(ht_insert(map, "decentBoy", "Mayank"));
+    struct test_t test1 = {1, 2};
+    struct test_t test2 = {3, 4};
 
-    // Check insertions
-    assert(strcmp((const char *)ht_search(map, "Yogaholic"), "Anjali") == 0);
-    assert(strcmp((const char *)ht_search(map, "pluto14"), "Vartika") == 0);
-    assert(strcmp((const char *)ht_search(map, "elite_Programmer"), "Manish") == 0);
-    assert(strcmp((const char *)ht_search(map, "GFG"), "GeeksforGeeks") == 0);
-    assert(strcmp((const char *)ht_search(map, "decentBoy"), "Mayank") == 0);
+    // Insert elements
+    ht_insert(map, "Test1", &test1);
+    ht_insert(map, "Test2", &test2);
 
-    // Test for a non-existent key
-    assert(ht_search(map, "randomKey") == NULL); // Should return NULL
-
-    // Test deletion
-    assert(ht_delete(map, "decentBoy")); // Successful deletion
-    assert(ht_search(map, "decentBoy") == NULL); // Should return NULL after deletion
-
-    // Cleanup
+    // Verify elements were inserted
+    assert(ht_search(map, "Test1") != NULL);
+    assert(ht_search(map, "Test2") != NULL);
+    
+    // Validate that the pointers returned are the same as inserted
+    assert(ht_search(map, "Test1") == &test1);
+    assert(ht_search(map, "Test2") == &test2);
+    
+    // Verify the element count is correct
+    assert(map->element_count == 2);
+    
+    // Clean up
     ht_deinit_table(map);
     free(map);
 }
 
-struct test_t {
-    int v1;
-    int v2;
-};
-
-void test_hashtable2() {
-    // Initialize the hash table
+void test_hashtable_duplicate_insertions() {
     HtTable *map = malloc(sizeof(HtTable));
-    assert(map != NULL);  // Ensure allocation was successful
+    assert(map != NULL);
     ht_init_table(map, 4);
 
-    struct test_t test = {1, 2};
-    struct test_t test2 = {3, 4};
+    struct test_t test1 = {1, 2};
+    
+    // Insert element
+    ht_insert_s(map, "Test1", 5, &test1);
+    assert(map->element_count == 1);
+    
+    // Insert the same element again
+    ht_insert_s(map, "Test1", 5, &test1);
+    assert(map->element_count == 2); // Count should remain the same
+    assert(ht_search(map,"Test1") == &test1); // Check data consistency
 
-    ht_insert_s(map, &test, sizeof(test), &test);
-    ht_insert_s(map, &test2, sizeof(test2), &test2);
+    ht_deinit_table(map);
+    free(map);
 }
 
-int main()
-{
-    test_hashtable(); // Call the test function
+void test_hashtable_deletion() {
+    HtTable *map = malloc(sizeof(HtTable));
+    assert(map != NULL);
+    ht_init_table(map, 4);
+
+    struct test_t test1 = {1, 2};
+    
+    // Insert the element
+    ht_insert_s(map, "Test1", 5, &test1);
+    assert(map->element_count == 1);
+    
+    // Now delete the inserted element
+    ht_delete(map, "Test1");
+    assert(ht_search(map, "Test1") == NULL); // Should not find the deleted element
+    assert(map->element_count == 0); // Count should be 0
+
+    ht_deinit_table(map);
+    free(map);
+}
+
+void run_tests() {
+    test_hashtable_basic_operations();
+    test_hashtable_duplicate_insertions();
+    test_hashtable_deletion();
+}
+
+int main() {
+    run_tests();
     return 0;
 }

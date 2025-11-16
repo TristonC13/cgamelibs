@@ -80,6 +80,18 @@ bool ht_delete(HtTable *tab, void *key);
 void *ht_search(HtTable *tab, void *key);
 
 /**
+ * Searches for a value associated with a given key in the hash table.
+ * This function uses a specified key length for comparison. If the key
+ * is not found, NULL is returned.
+ *
+ * @param tab Pointer to the hash table.
+ * @param key Pointer to the key to search for (should be a string).
+ * @param keylen Length of the key to be compared.
+ * @return Pointer to the value associated with the key, or NULL if not found.
+ */
+void *ht_search_s(HtTable *tab, void *key, size_t keylen);
+
+/**
  * Deinitializes a hash table, freeing all allocated resources. This includes the memory for 
  * keys, values, and the nodes in the linked lists.
  *

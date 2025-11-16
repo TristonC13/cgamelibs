@@ -79,7 +79,7 @@ bool ht_insert_s(HtTable *tab, void *key, size_t keylen, void *value)
         tab->buckets[idx] = new_node;        // Update the bucket to point to the new node
     }
 
-    tab->element_count++; // Increase the count of elements.
+    ++(tab->element_count); // Increase the count of elements.
 
     return true;
 }
@@ -136,6 +136,27 @@ void *ht_search(HtTable *tab, void *key)
     {
         // Compare the actual string values
         if (strcmp((const char *)bucketHead->key, (const char *)key) == 0)
+        {
+            // Key is found in the hashMap
+            return bucketHead->value; // Return the associated value
+        }
+        bucketHead = bucketHead->pnext; // Move to the next node
+    }
+
+    return NULL; // Return NULL if the key is not found
+}
+
+void *ht_search_s(HtTable *tab, void *key, size_t keylen)
+{
+    // Getting the bucket index for the given key
+    unsigned int bucketIndex = hash_key(key) % tab->bucket_count;
+
+    // Head of the linked list present at the bucket index
+    HtNode *bucketHead = tab->buckets[bucketIndex];
+    while (bucketHead != NULL)
+    {
+        // Compare the actual string values using strncmp
+        if (strncmp((const char *)bucketHead->key, (const char *)key, keylen) == 0)
         {
             // Key is found in the hashMap
             return bucketHead->value; // Return the associated value
