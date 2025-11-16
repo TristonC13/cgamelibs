@@ -1,5 +1,6 @@
 #include "hashtable/hashtable.h"
 #include "hashtable/hash.h"
+#include "string.h"
 
 DEF_HASH_FN_NULLTERM(unsigned);
 DEF_HASH_FN_SIZED(unsigned);
@@ -54,11 +55,12 @@ bool ht_insert_s(HtTable *tab, void *key, size_t keylen, void *value)
 
     new_node->key = htmalloc(keylen + 1);
 
-    new_node->key[keylen] = '\0';
-
-    // Duplicate the key
-    // should be `keylen + 1` to account for the null terminator instead of just `keylen`
+#ifdef strcpy_s
     strcpy_s(new_node->key, keylen + 1, key);
+#else
+    strncpy(new_node->key, key, keylen + 1);
+    new_node->key[keylen] = '\0'; // Ensure null-termination
+#endif
 
     new_node->value = value;
 

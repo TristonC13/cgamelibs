@@ -61,7 +61,7 @@ target_link_libraries(cgamelibs PUBLIC ${Vulkan_LIBRARIES} glfw)
 
 # Optionally, set the C standard
 set_target_properties(cgamelibs PROPERTIES
-    C_STANDARD 99        # Set to C11 if needed
+    C_STANDARD 11        # Set to C11 if needed
     C_STANDARD_REQUIRED True
 )
 
