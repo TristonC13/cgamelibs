@@ -1,6 +1,6 @@
-#include "cgamelibs.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "cgamelibs.h"
 
 /**
  * @brief Initializes the Vulkan surface for the specified window.
@@ -18,13 +18,13 @@
  *               to store the created surface handle.
  */
 void init_surface(Window *const window) {
-  // GLFW has a built-in function to create a surface from the window
-  int retval = glfwCreateWindowSurface(window->vkInstance, window->glfwWindow,
-                                       NULL, &window->vkSurfaceKHR);
-  if (retval != VK_SUCCESS) {
-    fprintf(stderr, "Failed to create window surface!\nReason: %d\n", retval);
-    exit(EXIT_FAILURE);
-  }
+	// GLFW has a built-in function to create a surface from the window
+	int retval = glfwCreateWindowSurface(window->vkInstance, window->glfwWindow, NULL,
+										 &window->vkSurfaceKHR);
+	if (retval != VK_SUCCESS) {
+		fprintf(stderr, "Failed to create window surface!\nReason: %d\n", retval);
+		exit(EXIT_FAILURE);
+	}
 }
 
 /**
@@ -39,11 +39,11 @@ void init_surface(Window *const window) {
  * (`vkSurfaceKHR`) to be destroyed.
  */
 void deinit_surface(Window *const window) {
-  if (window->vkSurfaceKHR != VK_NULL_HANDLE) {
-    // Destroy the Vulkan surface
-    vkDestroySurfaceKHR(window->vkInstance, window->vkSurfaceKHR, NULL);
+	if (window->vkSurfaceKHR != VK_NULL_HANDLE) {
+		// Destroy the Vulkan surface
+		vkDestroySurfaceKHR(window->vkInstance, window->vkSurfaceKHR, NULL);
 
-    // Set the handle to VK_NULL_HANDLE to prevent accidental use
-    window->vkSurfaceKHR = VK_NULL_HANDLE;
-  }
+		// Set the handle to VK_NULL_HANDLE to prevent accidental use
+		window->vkSurfaceKHR = VK_NULL_HANDLE;
+	}
 }

@@ -2,9 +2,9 @@
 #define HASHTABLE_H
 
 #include "stdbool.h" // bool type
-#include "stddef.h"  // Standard definitions (e.g., size_t)
-#include "stdlib.h"  // Memory allocation functions (malloc, free)
-#include "string.h"  // String manipulation functions (strcpy)
+#include "stddef.h"	 // Standard definitions (e.g., size_t)
+#include "stdlib.h"	 // Memory allocation functions (malloc, free)
+#include "string.h"	 // String manipulation functions (strcpy)
 
 // Memory management macros for simplified allocation and deallocation
 #define htmalloc(size) malloc(size)
@@ -12,17 +12,17 @@
 
 // Struct definition for a node in the hash table's linked list
 typedef struct HtNode {
-  char *key;            // Key for the hash table entry (null-terminated string)
-  void *value;          // Pointer to the value associated with the key
-  struct HtNode *pnext; // Pointer to the next node for handling collisions
+	char		  *key;	  // Key for the hash table entry (null-terminated string)
+	void		  *value; // Pointer to the value associated with the key
+	struct HtNode *pnext; // Pointer to the next node for handling collisions
 } HtNode;
 
 // Struct definition for the hash table itself
 typedef struct HtTable {
-  HtNode **buckets; // Array of pointers to linked list heads representing hash
-                    // table buckets
-  unsigned bucket_count;  // Total number of buckets in the hash table
-  unsigned element_count; // Current number of key-value pairs in the hash table
+	HtNode **buckets;		// Array of pointers to linked list heads representing hash
+							// table buckets
+	unsigned bucket_count;	// Total number of buckets in the hash table
+	unsigned element_count; // Current number of key-value pairs in the hash table
 } HtTable;
 
 // Function prototypes for hash table operations
