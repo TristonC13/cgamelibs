@@ -2,7 +2,7 @@
 #define VECTOR_H
 
 #include <stddef.h>
-#include <string.h>
+#include <stdlib.h>
 
 /*  Generic vector macro
  *
