@@ -1,7 +1,6 @@
 #ifndef BTREE_H
 #define BTREE_H
 
-#include "stdlib.h"
 #include "vector/vector.h"
 #include <stddef.h>
 #include <string.h>
