@@ -1,36 +1,43 @@
-#include "hashtable/hashtable2.h"
-#include <assert.h>
-#include <stddef.h>
 #include <stdio.h>
-#include <stdlib.h>
+#include <assert.h>
+#include "hashtable/hashtable2.h"
 
-DEF_HASHTABLE(int, int, StrIntTab);
-
-size_t StrIntTab_hash_key(int key) {
-	return (size_t) key;
+// Hash function for integers
+size_t IntHashTable_hash_key(int key) {
+    return (size_t) key; // Simple hash for demonstration purposes
 }
 
-int main(void) {
-	StrIntTab t;
-	StrIntTab_init(&t, 16);
-	StrIntTab_insert(&t, 0, 15);
-	printf("%d\n", *StrIntTab_get(&t, 0));
+// Define the hash table for integer key and value
+DEF_HASHTABLE(int, int, IntHashTable)
 
-	for (size_t i = 0; i < t.size; ++i) {
-		StrIntTab_node *bucket_head = t.table[i];
-		if (bucket_head) {
-			printf("Bucket #%zu: %p\n", i, bucket_head);
+int main() {
+    IntHashTable ht;
+    IntHashTable_init(&ht, 10);
 
-			StrIntTab_node *c = bucket_head;
-			while (c) {
-				printf("%d = %d (%zu)\n", c->key, c->value, c->key_hash);
-				c = c->pnext;
-			}
-		}
-	}
+    // Test insertion
+    IntHashTable_insert(&ht, 1, 100);
+    IntHashTable_insert(&ht, 2, 200);
+    
+    // Test retrieval
+    int *val1 = IntHashTable_get(&ht, 1);
+    assert(val1 != NULL && *val1 == 100);
+    
+    int *val2 = IntHashTable_get(&ht, 2);
+    assert(val2 != NULL && *val2 == 200);
 
-	StrIntTab_delete(&t, 0);
-	assert(StrIntTab_get(&t, 0) == NULL);
+    // Test deletion
+    IntHashTable_delete(&ht, 1);
+    val1 = IntHashTable_get(&ht, 1);
+    assert(val1 == NULL);  // 1 should be deleted
 
-	StrIntTab_deinit(&t);
+    // Test retrieval for remaining item
+    val2 = IntHashTable_get(&ht, 2);
+    assert(val2 != NULL && *val2 == 200);
+
+    // Test deinitialization
+    IntHashTable_deinit(&ht);
+
+    printf("All tests passed!\n");
+    
+    return 0;
 }
