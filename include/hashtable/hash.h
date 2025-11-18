@@ -20,7 +20,8 @@
  *
  * The produced prototype is:
  * @code
- * RET_TYPE FN_NAME(void *p_key, size_t len);
+ * RET_TYPE FN_NAME(vnclude/linked_list/double.h    |  71 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ include/linked_list/single.h oid *p_key, size_t len);
  * @endcode
  *
  * @note The macro does **not** perform any alignment checks; the caller must

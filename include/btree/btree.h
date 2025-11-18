@@ -76,12 +76,11 @@ typedef enum IterDirection {
                                                                                                                        \
 	static int BTREE_T##_iter_parent(BTREE_T##_iterator *iter) {                                                       \
 		struct BTREE_T##_node *p;                                                                                      \
-		BTREE_T##_pnode_stack_pop_back(&iter->stack, &p);                                                              \
-		if (p != NULL) {                                                                                               \
+		int					   result = BTREE_T##_pnode_stack_pop_back(&iter->stack, &p);                              \
+		if (result != 0) {                                                                                             \
 			iter->current = p;                                                                                         \
-			return 1;                                                                                                  \
 		}                                                                                                              \
-		return 0;                                                                                                      \
+		return result;                                                                                                 \
 	}                                                                                                                  \
                                                                                                                        \
 	static int BTREE_T##_iter_child(BTREE_T##_iterator *iter, IterDirection direction) {                               \
